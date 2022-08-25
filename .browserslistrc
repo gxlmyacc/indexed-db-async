@@ -1,0 +1,9 @@
+# see detail: https://github.com/browserslist/browserslist#configuring-for-different-environments
+[production]
+chrome 49
+
+[development]
+last 1 chrome version
+
+[modern]
+last 1 chrome version
