@@ -1,0 +1,9 @@
+.db-async {
+  padding: 20px;
+
+  &:scope {
+    .ant-btn:not(:first-child) {
+      margin-left: 8px;
+    }
+  }
+}

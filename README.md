@@ -45,6 +45,24 @@ for (let i = 1; i < 10; i++) {
   const count = await db.put<DBItem[]>('table1', { url: `url${i}`, data: 'data' + i, timestamp: Date.now() });
   console.log('put count: ' +  count);
 }
+
+const count = await db.add(
+  'table1', 
+  [
+    { url: `url1`, data: 'data1', timestamp: Date.now() },
+    { url: `url2`, data: 'data2', timestamp: Date.now() },
+    { url: `url3`, data: 'data3', timestamp: Date.now() }
+  ]
+);
+
+const count = await db.put(
+  'table1', 
+  [
+    { url: `url1`, data: 'data1', timestamp: Date.now() },
+    { url: `url2`, data: 'data2', timestamp: Date.now() },
+    { url: `url3`, data: 'data3', timestamp: Date.now() }
+  ]
+);
 ```
 
 3. get data 
@@ -66,15 +84,15 @@ const itemList = await db.query('table1', `url1`);
 console.log(`query item list `, itemList);
 
 // query keys
-const keys = await db.queryKeys('table1', IDBKeyRange.lowerBound(0), { indexName: 'timestamp' });
+const keys = await db.queryKeys('table1', '> "url1"');
 console.log(`query keys `, keys);
 
 // query data by index
-const itemList = await db.query('table1', 12314234234, { indexName: 'timestamp' });
+const itemList = await db.query('table1', 'timestamp > 12314234234');
 console.log(`query item list `, itemList);
 
 // query data by index using IDBKeyRange
-const itemList = await db.query('table1', IDBKeyRange.lowerBound(0), { indexName: 'timestamp' });
+const itemList = await db.query('table1', IDBKeyRange.lowerBound(0));
 console.log(`query item list `, itemList);
 ```
 
@@ -95,16 +113,35 @@ console.log(`table cleared, current count:`, await db.count(table1));
 6. delete table item
 
 ```js
-const deleteCount = await db.delete('table1', 'url1');
-console.log(`delete count:`, deleteCount);
+await db.delete('table1', 'url1');
+
+// delete datas
+await db.delete('table1', ['url1', 'url2', 'url3']);
+
+// delete data using IDBKeyRange
+await db.deleteRange('table1', '> "url1"');
 
 // delete data by index
-const deleteCount = await db.delete('table1', 12314234234, { indexName: 'timestamp' });
-console.log(`delete count:`, deleteCount);
+await db.deleteRange('table1', 'timestamp = 12314234234');
 
 // delete data by index using IDBKeyRange
-const deleteCount = await db.delete('table1', IDBKeyRange.lowerBound(0), { indexName: 'timestamp' });
-console.log(`delete count:`, deleteCount);
+await db.deleteRange('table1', 'timestamp > 0');
+
+await db.deleteRange('table1', `timestamp >= 0 && < ${new Date().now()}`);
+
+```
+
+7. create IDBKeyRange by text
+```js
+db.range('<= x')          // => IDBKeyRange.upperBound('x')
+db.range('< x')           // => IDBKeyRange.upperBound('x', true)
+db.range('>= x')          // => IDBKeyRange.lowerBound('x')
+db.range('> x')           // => IDBKeyRange.lowerBound('x', true)
+db.range('>= x && <= y')  // => IDBKeyRange.bound('x', 'y')
+db.range('> x && < y')    // => IDBKeyRange.bound('x', 'y', true, true)
+db.range('> x && <= y')   // => IDBKeyRange.bound('x', 'y', true)
+db.range('>= x && < y')   // => IDBKeyRange.bound('x', 'y', false, true)
+db.range('= x')           // => IDBKeyRange.only('x')
 ```
 
 ## License
