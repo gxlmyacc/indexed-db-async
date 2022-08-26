@@ -23,7 +23,7 @@
   "scripts": {
     "build": "npm run build:types && npm run build:js && npm run build:es",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "cross-env BUILD_ENV=js babel src -d esm --extensions \".ts,.tsx\" --source-maps",
+    "build:js": "cross-env BUILD_ENV=js babel src -d esm --extensions \".ts,.tsx\"",
     "build:es": "cross-env BUILD_ENV=es babel src -d es --extensions \".ts,.tsx\"",
     "prepare": "npm run build",
     "build-demo": "cross-env NODE_ENV=development BUILD_ENV=demo webpack --config ./build/webpack.config.js",

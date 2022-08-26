@@ -143,8 +143,5 @@ db.range('> x && <= y')   // => IDBKeyRange.bound('x', 'y', true)
 db.range('>= x && < y')   // => IDBKeyRange.bound('x', 'y', false, true)
 db.range('= x')           // => IDBKeyRange.only('x')
 ```
-
-## License
-
-[MIT](./LICENSE)
+range text format: `[indexName] >|<|>=|<= value1 [&& >|<|>=|<= value2]`
 
