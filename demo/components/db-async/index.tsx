@@ -18,7 +18,7 @@ function DBAsyncIndex() {
   const [timestamp, setTimestamp] = useState(0);
 
   const dbOpen = useEvent(async () => {
-    const db = new IndexedDBAsync('indexed-db-test', 1, [
+    const db = new IndexedDBAsync('demo-indexed-db-async', 1, [
       {
         name: 'fetched',
         key: 'url',
